@@ -1,22 +1,31 @@
 .course {
   position: absolute;
-  border: solid;
+  border: none;
   width: 80%;
   border-width: 1px;
   text-align: center;
   background-color: rgb(119, 119, 194);
+  color: auto;
+}
+
+.course-detail {
+  padding-left: 10px;
   color: white;
   font-size: 14px;
 }
 
-.course > p {
+.course-detail > p {
   font-size: 10px;
+}
+
+.cdk-drag-preview {
+  box-shadow: 1px 1px 5px 1px black;
 }
 
 .course-tag {
   position: absolute;
   width: 5px;
-  background-color:  rgb(46, 46, 197);
+  background-color: rgb(46, 46, 197);
   z-index: 1;
   margin: 3px 0px;
   border-radius: 20px;
@@ -28,7 +37,8 @@
   width: 100px;
 }
 
-.period, .period-inverse {
+.period,
+.period-inverse {
   height: 50px;
   position: relative;
   padding: 10px 10px;

@@ -119,7 +119,7 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
   }
 
   divHeight(course: Course) {
-    return `${(course.endTime.getHours() - course.startTime.getHours()) * 50}`;
+    return (course.endTime.getHours() - course.startTime.getHours()) * 50;
   }
 
   onDragStart(course: Course) {
