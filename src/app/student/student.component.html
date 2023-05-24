@@ -1,0 +1,6 @@
+<div *ngIf="student">
+  <h1>{{ student.name }}</h1>
+
+  <p>{{ student.birthdate | date }}</p>
+  <button routerLink="/courses/{{ student.id }}">Courses</button>
+</div>

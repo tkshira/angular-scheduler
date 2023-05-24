@@ -1,0 +1,27 @@
+.custom-card {
+  flex: auto;
+  flex-direction: column;
+  margin: 3px;
+  border-color: black;
+  border: solid;
+  border-width: 1px;
+  padding: 10px;
+}
+
+.student-button {
+  border-radius: 20px;
+  animation: mymove 5s infinite;
+}
+
+.student-button:hover {
+  background-color: aquamarine;
+}
+
+@keyframes mymove {
+  from {
+    background-color: azure;
+  }
+  to {
+    background-color: blue;
+  }
+}

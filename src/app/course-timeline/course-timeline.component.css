@@ -1,0 +1,99 @@
+.course {
+  position: absolute;
+  border: solid;
+  width: 80%;
+  border-width: 1px;
+  text-align: center;
+  background-color: rgb(119, 119, 194);
+  color: white;
+  font-size: 14px;
+}
+
+.course > p {
+  font-size: 10px;
+}
+
+.course-tag {
+  position: absolute;
+  width: 5px;
+  background-color:  rgb(46, 46, 197);
+  z-index: 1;
+  margin: 3px 0px;
+  border-radius: 20px;
+}
+
+.period-list {
+  flex: 1;
+  flex-direction: column;
+  width: 100px;
+}
+
+.period, .period-inverse {
+  height: 50px;
+  position: relative;
+  padding: 10px 10px;
+}
+
+.period-list > div {
+  border: 0px dotted black;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 0px;
+  flex: 1;
+}
+
+.day-list {
+  display: flex;
+  flex: 4;
+}
+
+.weekday-list {
+  display: flex;
+  flex: 1;
+}
+
+.course-list {
+  position: relative;
+  flex: 6;
+  height: 450px;
+  border: lightgrey 1px solid;
+  border-top: 0px;
+  border-bottom: 0px;
+}
+
+.day-list {
+  flex-direction: column;
+}
+
+.day {
+  flex-direction: column;
+  flex: 1;
+  border: 0px dotted black;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 0px;
+  height: 50px;
+}
+
+.period:nth-child(even),
+.period-inverse:nth-child(odd) {
+  background-color: rgba(245, 245, 245, 0.932);
+}
+
+.scheduler {
+  display: flex;
+}
+
+div {
+  border: 0px solid;
+}
+
+.example-custom-placeholder {
+  background: #ccc;
+  border: dotted 3px #999;
+  /* min-height: 100px; */
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  position: absolute;
+  width: 100%;
+  font-size: 14px;
+}
