@@ -38,7 +38,7 @@
                     <div class="example-custom-placeholder" [style.top.px]="currDragPos" [style.height.px]="(course.endTime.getTime() - course.startTime.getTime()) / 1000 / 60 / 60 * 50"  *cdkDragPlaceholder></div>
                     <div class="course-detail">
                       {{ course.name }} 
-                      <p>{{ course.startTime | date:'shortTime' }}~{{course.endTime | date:'shortTime' }}</p>
+                      <p>{{ course.startTime | date:'HH:mm' }}~{{course.endTime | date:'HH:mm' }}</p>
                     </div>
                   
                 </div>
