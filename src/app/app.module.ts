@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { CommonModule, DatePipe, registerLocaleData } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app/app.component';
 import { BrowserModule } from '@angular/platform-browser';
@@ -11,8 +11,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CourseTimelineComponent } from './course-timeline/course-timeline.component';
 import { CourseNewComponent } from './course-timeline/course-new/course-new.component';
-
 import { CourseService } from './services/course.service';
+
+import localeJp from '@angular/common/locales/ja';
+registerLocaleData(localeJp);
 
 @NgModule({
   imports: [
@@ -35,6 +37,12 @@ import { CourseService } from './services/course.service';
     CourseNewComponent,
   ],
   bootstrap: [AppComponent],
-  providers: [DatePipe],
+  providers: [
+    DatePipe,
+    {
+      provide: LOCALE_ID,
+      useValue: 'ja',
+    },
+  ],
 })
 export class AppModule {}

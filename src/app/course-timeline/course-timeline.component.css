@@ -36,13 +36,14 @@
   flex: 1;
   flex-direction: column;
   width: 100px;
+  text-align: right;
 }
 
 .period,
 .period-inverse {
   height: 50px;
   position: relative;
-  padding: 10px 10px;
+  padding: 0px 10px;
 }
 
 .period-list > div {
@@ -66,7 +67,7 @@
 .course-list {
   position: relative;
   flex: 6;
-  height: 450px;
+  /* height: 450px; */
   border: lightgrey 1px solid;
   border-top: 0px;
   border-bottom: 0px;
@@ -83,7 +84,12 @@
   border-left: 0px;
   border-right: 0px;
   border-bottom: 0px;
-  height: 50px;
+  height: 80px;
+  text-align: center;
+}
+
+.period:first-child{
+  height: 80px
 }
 
 .period:nth-child(even),
@@ -107,4 +113,12 @@ div {
   position: absolute;
   width: 100%;
   font-size: 14px;
+}
+
+.row:first-child{
+  padding-top: 10px;
+}
+
+.row:not(:first-child){
+  padding: 15px 0px;
 }

@@ -1,46 +1,63 @@
 
-<div>
-  <h1>Courses</h1>
-  <div class="scheduler">
-    <div class="period-list">
-      <div class="period">&nbsp;</div>
-      <div *ngFor="let period of periods" class="period">
-        <div>
-          {{ period.starttime.hours }}:{{
-            period.starttime.minutes | number: '2.0-0'
-          }}~{{ period.endtime.hours }}:{{
-            period.endtime.minutes | number: '2.0-0'
-          }}
-        </div>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>日報</h1>
+      <div class="form-floating">
+        <select class="form-select" id="student-select">
+          <option *ngFor="let student of students" value={{student.id}}> 
+            {{student.name}}
+          </option>
+        </select>
+        <label for="student-select">社員名</label>
       </div>
     </div>
-    <div class="day-list">
-      <div class="weekday-list" cdkDropListGroup >
-        <div *ngFor="let day of days" class="day" >
-          <div class="day">{{ day.date | date }}</div>
-          <div class="course-list" [attr.data-daydate]="day.date" cdkDropListSortingDisabled cdkDropList>
-            <div *ngFor="let period of periods" class="period-inverse">
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="scheduler">
+        <div class="period-list">
+          <div class="period">&nbsp;</div>
+          <div *ngFor="let period of periods" class="period">
+            <div>
+              {{ period.starttime.hours | number: '2.0-0' }}:{{
+                period.starttime.minutes | number: '2.0-0'
+              }}
             </div>
-            <div *ngFor="let course of courses">
-              <div *ngIf="canShowCourse(course, day)">
-                <div class="course"
-                  [style.top.px]="calcTopPos(course)"
-                  [style.height.px]="divHeight(course)"
-                  (click)="onCourseClick(course)"
-                  cdkDragBoundary=".weekday-list"
-                  (cdkDragStarted)="onDragStart(course)"
-                  (cdkDragDropped)="onDragRelease($event, course)"
-                  (cdkDragMoved)="onDragMove($event)"
-                  cdkDrag>
-                    <div class="course-tag"
-                      [style.height.px]="divHeight(course) - 6">
+          </div>
+        </div>
+        <div class="day-list">
+          <div class="weekday-list" cdkDropListGroup >
+            <div *ngFor="let day of days" class="day" >
+              <div class="day">
+                <p>{{day.date | date:'ccc'}}</p>
+                <h3>{{ day.date | date:'dd' }}</h3>
+              </div>
+              <div class="course-list" [attr.data-daydate]="day.date" cdkDropListSortingDisabled cdkDropList>
+                <div *ngFor="let period of periods" class="period-inverse">
+                </div>
+                <div *ngFor="let course of courses">
+                  <div *ngIf="canShowCourse(course, day)">
+                    <div class="course"
+                      [style.top.px]="calcTopPos(course)"
+                      [style.height.px]="divHeight(course)"
+                      (click)="onCourseClick(course)"
+                      cdkDragBoundary=".weekday-list"
+                      (cdkDragStarted)="onDragStart(course)"
+                      (cdkDragDropped)="onDragRelease($event, course)"
+                      (cdkDragMoved)="onDragMove($event)"
+                      cdkDrag>
+                        <div class="course-tag"
+                          [style.height.px]="divHeight(course) - 6">
+                        </div>
+                        <div class="example-custom-placeholder" [style.top.px]="currDragPos" [style.height.px]="(course.endTime.getTime() - course.startTime.getTime()) / 1000 / 60 / 60 * 50"  *cdkDragPlaceholder></div>
+                        <div class="course-detail">
+                          {{ course.name }} 
+                          <p>{{ course.startTime | date:'HH:mm' }}~{{course.endTime | date:'HH:mm' }}</p>
+                        </div>
+                      
                     </div>
-                    <div class="example-custom-placeholder" [style.top.px]="currDragPos" [style.height.px]="(course.endTime.getTime() - course.startTime.getTime()) / 1000 / 60 / 60 * 50"  *cdkDragPlaceholder></div>
-                    <div class="course-detail">
-                      {{ course.name }} 
-                      <p>{{ course.startTime | date:'HH:mm' }}~{{course.endTime | date:'HH:mm' }}</p>
-                    </div>
-                  
+                  </div>
                 </div>
               </div>
             </div>

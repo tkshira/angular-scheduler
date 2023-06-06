@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AcademicDay, academicDays } from '../interfaces/academic-day';
 import { Course, courses } from '../interfaces/courses';
 import { defaultPeriod, Period } from '../interfaces/period';
+import { Student, students } from '../interfaces/student';
 import { CourseService } from '../services/course.service';
 
 declare var bootstrap: any;
@@ -20,6 +21,7 @@ declare var bootstrap: any;
 })
 export class CourseTimelineComponent implements OnInit, AfterViewInit {
   studentid?: number;
+  students: Student[];
   courses?: Course[];
   days: AcademicDay[];
   periods: Period[];
@@ -36,6 +38,7 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     console.log('timeline Init');
+    this.students = students;
     this.days = academicDays;
     this.periods = defaultPeriod;
     const id = parseInt(this.route.snapshot.paramMap.get('id'));
@@ -109,12 +112,12 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
       return '';
     }
     return `translate(${(course.day.getDay() - 1) * 0}px, ${
-      (course.startTime.getHours() - 9) * 50
+      course.startTime.getHours() * 50
     }px)`;
   }
 
   calcTopPos(course: Course) {
-    return (course.startTime.getHours() - 9) * 50;
+    return course.startTime.getHours() * 50;
     // return 50;
   }
 
@@ -138,8 +141,8 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
       event.container.element.nativeElement.dataset['daydate']
     );
     // course.startTime = new Date(`1970-01-01 0:00`).setHours(9 + startTime);
-    course.startTime = new Date(1900, 0, 1, 9 + startTime);
-    course.endTime = new Date(1900, 0, 1, 9 + startTime + ~~(durationMin / 60));
+    course.startTime = new Date(1900, 0, 1, startTime);
+    course.endTime = new Date(1900, 0, 1, startTime + ~~(durationMin / 60));
     console.log(startTime);
     this.dragCourse = undefined;
   }
