@@ -6,6 +6,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { StudentListComponent } from './student-list/student-list.component';
 import { StudentComponent } from './student/student.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -27,6 +29,8 @@ registerLocaleData(localeJp);
       { path: 'courses/:id', component: CourseTimelineComponent },
     ]),
     MatCardModule,
+    MatIconModule,
+    MatButtonModule,
     DragDropModule,
   ],
   declarations: [

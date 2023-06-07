@@ -3,6 +3,24 @@
   <div class="row">
     <div class="col">
       <h1>日報</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button mat-raised-button color="primary" type="button">
+        <mat-icon>save</mat-icon>Save
+      </button>
+    </div>
+    <div class="col">
+      <button mat-raised-button color="primary" type="button">
+        <mat-icon>delete</mat-icon>Discard
+      </button>
+    </div>
+    <div class="col-9">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
       <div class="form-floating">
         <select class="form-select" id="student-select">
           <option *ngFor="let student of students" value={{student.id}}> 
@@ -10,6 +28,21 @@
           </option>
         </select>
         <label for="student-select">社員名</label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-9 col-md-8 " >
+    </div>
+    <div class="col">
+      <div class="input-group">
+        <button class="btn btn-outline-secondary" type="button">
+          <mat-icon>navigate_before</mat-icon>
+        </button>
+        <input type="text" class="form-control" disabled=true [value]="getDateRangeName()"> 
+        <button class="btn btn-outline-secondary" type="button">
+          <mat-icon>navigate_next</mat-icon>
+        </button>
       </div>
     </div>
   </div>
@@ -41,6 +74,8 @@
                     <div class="course"
                       [style.top.px]="calcTopPos(course)"
                       [style.height.px]="divHeight(course)"
+                      [style.width.%]="divWidth(course)"
+                      [style.left.%]="divLeft(course)"
                       (click)="onCourseClick(course)"
                       cdkDragBoundary=".weekday-list"
                       (cdkDragStarted)="onDragStart(course)"

@@ -7,6 +7,10 @@ export interface AcademicDay {
 
 export const academicDays: AcademicDay[] = [
   {
+    date: new Date('2023/05/14'),
+    period: defaultPeriod,
+  },
+  {
     date: new Date('2023/05/15'),
     period: defaultPeriod,
   },
@@ -24,6 +28,10 @@ export const academicDays: AcademicDay[] = [
   },
   {
     date: new Date('2023/05/19'),
+    period: defaultPeriod,
+  },
+  {
+    date: new Date('2023/05/20'),
     period: defaultPeriod,
   },
 ];

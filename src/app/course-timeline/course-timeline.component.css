@@ -1,7 +1,7 @@
 .course {
   position: absolute;
   border: none;
-  width: 80%;
+  /* width: 80%; */
   border-width: 1px;
   text-align: center;
   background-color: rgb(119, 119, 194);
@@ -35,8 +35,9 @@
 .period-list {
   flex: 1;
   flex-direction: column;
-  width: 100px;
+  width: 10px;
   text-align: right;
+  font-size: 12px
 }
 
 .period,
@@ -56,7 +57,7 @@
 
 .day-list {
   display: flex;
-  flex: 4;
+  flex: 7;
 }
 
 .weekday-list {

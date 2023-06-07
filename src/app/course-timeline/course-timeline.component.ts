@@ -11,6 +11,7 @@ import { Course, courses } from '../interfaces/courses';
 import { defaultPeriod, Period } from '../interfaces/period';
 import { Student, students } from '../interfaces/student';
 import { CourseService } from '../services/course.service';
+import { DatePipe } from '@angular/common';
 
 declare var bootstrap: any;
 
@@ -21,6 +22,8 @@ declare var bootstrap: any;
 })
 export class CourseTimelineComponent implements OnInit, AfterViewInit {
   studentid?: number;
+  startDay: Date;
+  endDay: Date;
   students: Student[];
   courses?: Course[];
   days: AcademicDay[];
@@ -33,12 +36,15 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
   @ViewChild('newCourseModal') newCourseModal: ElementRef;
   constructor(
     private route: ActivatedRoute,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit() {
     console.log('timeline Init');
     this.students = students;
+    this.startDay = new Date('2023/05/14');
+    this.endDay = new Date('2023/05/20');
     this.days = academicDays;
     this.periods = defaultPeriod;
     const id = parseInt(this.route.snapshot.paramMap.get('id'));
@@ -74,6 +80,17 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
         this.selCourse = undefined;
       }
     );
+  }
+
+  getDateRangeName(): string {
+    if (this.startDay.getMonth() === this.endDay.getMonth()) {
+      return this.datePipe.transform(this.startDay, 'yyyy年MM月', 'ja-jp');
+    } else {
+      return `${this.datePipe.transform(
+        this.startDay,
+        'yyyy年MM月'
+      )}～${this.datePipe.transform(this.endDay, 'yyyy年MM月')}`;
+    }
   }
 
   canShowCourse(course: Course, day: AcademicDay): boolean {
@@ -123,6 +140,45 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
 
   divHeight(course: Course) {
     return (course.endTime.getHours() - course.startTime.getHours()) * 50;
+  }
+
+  getOverlapCourse(curCourse: Course): Course[]{
+    return this.courses.filter((course) => {
+      return ((course.day.toDateString() === curCourse.day.toDateString()) &&
+        ((course.startTime < curCourse.startTime && course.endTime > curCourse.startTime)
+         || (course.startTime < curCourse.endTime && course.endTime > curCourse.endTime )
+         || (course.startTime === curCourse.startTime && course.endTime === curCourse.endTime)
+         || (course.startTime <= curCourse.startTime && course.endTime >= curCourse.endTime)
+         || (course.startTime >= curCourse.startTime && course.endTime <= curCourse.endTime)))
+    })
+  }
+
+  divWidth(curCourse: Course) {
+    const overlapCourse = this.getOverlapCourse(curCourse);
+    if (overlapCourse.length){
+      console.log(`divWidth = ${overlapCourse.length}`);
+      return  (100 * 1 / overlapCourse.length) * 0.95;
+    }
+    return 95
+  }
+
+  divLeft(curCourse: Course) {
+    const overlapCourse = this.getOverlapCourse(curCourse);
+
+    if (overlapCourse.length){
+      overlapCourse.sort((a, b) => {
+        let result = a.startTime.getTime() - b.startTime.getTime()
+        if (result){
+          let result = a.endTime.getTime() - b.endTime.getTime()
+          if (result){
+            result = a.name > b.name ? -1 : 1
+          }
+        }
+        return result
+      })
+      return (100 / overlapCourse.length) * overlapCourse.indexOf(curCourse)
+      console.log(overlapCourse.indexOf(curCourse))
+    }
   }
 
   onDragStart(course: Course) {
