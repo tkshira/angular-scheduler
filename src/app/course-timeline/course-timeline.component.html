@@ -76,6 +76,7 @@
                       [style.height.px]="divHeight(course)"
                       [style.width.%]="divWidth(course)"
                       [style.left.%]="divLeft(course)"
+                      [style.transform]="'translateXY(' + defTop + 'px)'"
                       (click)="onCourseClick(course)"
                       cdkDragBoundary=".weekday-list"
                       (cdkDragStarted)="onDragStart(course)"

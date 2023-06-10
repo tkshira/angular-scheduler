@@ -31,7 +31,6 @@ export class CourseNewComponent implements OnChanges {
   constructor(private courseService: CourseService, private dp: DatePipe) {}
 
   onSave() {
-    console.log(this.courseForm.value.courseDate);
     let course: Course = {
       id: this.course.id,
       studentid: this.course.studentid,
@@ -42,7 +41,6 @@ export class CourseNewComponent implements OnChanges {
     };
 
     let courseObs;
-    console.log(course.id);
     if (course.id) {
       courseObs = this.courseService.putCourse(course);
     } else {

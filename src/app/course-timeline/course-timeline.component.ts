@@ -32,6 +32,7 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
   selCourse?: Course;
   currDragPos: number;
   maxPos: number;
+  defTop = '50px';
 
   @ViewChild('newCourseModal') newCourseModal: ElementRef;
   constructor(
@@ -134,12 +135,15 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
   }
 
   calcTopPos(course: Course) {
-    return course.startTime.getHours() * 50;
+    if (course.id === 1){
+      console.log((course.startTime.getHours() + (course.startTime.getMinutes() / 60))  * 50);
+    }
+    return (course.startTime.getHours() + (course.startTime.getMinutes() / 60))  * 50;
     // return 50;
   }
 
   divHeight(course: Course) {
-    return (course.endTime.getHours() - course.startTime.getHours()) * 50;
+    return (course.endTime.getTime() - course.startTime.getTime()) / 3600000 * 50;
   }
 
   getOverlapCourse(curCourse: Course): Course[]{
@@ -156,7 +160,6 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
   divWidth(curCourse: Course) {
     const overlapCourse = this.getOverlapCourse(curCourse);
     if (overlapCourse.length){
-      console.log(`divWidth = ${overlapCourse.length}`);
       return  (100 * 1 / overlapCourse.length) * 0.95;
     }
     return 95
@@ -189,9 +192,11 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
     // console.log(event.dropPoint.y - event.container.element.nativeElement.offsetTop);
     let durationMin =
       (course.endTime.getTime() - course.startTime.getTime()) / 1000 / 60;
+    console.log(event);
     let posY: number =
-      event.dropPoint.y - event.container.element.nativeElement.offsetTop;
+      event.dropPoint.y - event.container.element.nativeElement.offsetTop + window.scrollY;
     posY = Math.min(Math.max(0, posY), this.maxPos);
+    console.log(`posY: ${posY}`);
     let startTime = ~~(posY / 50);
     course.day = new Date(
       event.container.element.nativeElement.dataset['daydate']
@@ -199,14 +204,14 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
     // course.startTime = new Date(`1970-01-01 0:00`).setHours(9 + startTime);
     course.startTime = new Date(1900, 0, 1, startTime);
     course.endTime = new Date(1900, 0, 1, startTime + ~~(durationMin / 60));
-    console.log(startTime);
+    console.log(`onDragRelease: ${course}`);
     this.dragCourse = undefined;
   }
 
   onDragMove(event) {
     let posY =
       event.pointerPosition.y -
-      event.source.dropContainer.element.nativeElement.offsetTop;
+      event.source.dropContainer.element.nativeElement.offsetTop + window.scrollY;
     posY = Math.max(0, posY);
     posY = Math.min(this.maxPos, posY);
     this.currDragPos = ~~(posY / 50) * 50;
