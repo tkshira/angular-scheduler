@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject, map, mergeMap } from 'rxjs';
+import { Observable, of, BehaviorSubject, map, mergeMap, scheduled, asyncScheduler } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { Course, courses } from '../interfaces/courses';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -10,12 +11,13 @@ export class CourseService {
   private courseSource = new BehaviorSubject<Course[]>([]);
   courseObservable = this.courseSource.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.courseSource.next(courses);
   }
 
   getCourses(): Observable<Course[]> {
     return of(courses);
+    // return scheduled(courses, asyncScheduler);
   }
 
   getCoursesByStudentId(studentid: number): Observable<Course[]> {
