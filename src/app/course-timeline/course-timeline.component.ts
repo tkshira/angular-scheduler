@@ -4,6 +4,7 @@ import {
   OnInit,
   ViewChild,
   AfterViewInit,
+  Input
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AcademicDay, academicDays } from '../interfaces/academic-day';
@@ -12,6 +13,7 @@ import { defaultPeriod, Period } from '../interfaces/period';
 import { Student, students } from '../interfaces/student';
 import { CourseService } from '../services/course.service';
 import { DatePipe } from '@angular/common';
+import { Observable, of } from 'rxjs';
 
 declare var bootstrap: any;
 
@@ -21,13 +23,17 @@ declare var bootstrap: any;
   styleUrls: ['./course-timeline.component.css'],
 })
 export class CourseTimelineComponent implements OnInit, AfterViewInit {
-  studentid?: number;
+  viewType = 1;
+  dayCount = 7;
+  studentid: number;
   startDay: Date;
   endDay: Date;
   students: Student[];
   courses?: Course[];
   days: AcademicDay[];
   periods: Period[];
+  dayList: Observable<AcademicDay[]>;
+
   dragCourse?: Course;
   selCourse?: Course;
   currDragPos: number;
@@ -41,32 +47,63 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
     private datePipe: DatePipe
   ) {}
 
-  ngOnInit() {
-    console.log('timeline Init');
-    this.students = students;
-    this.startDay = new Date('2023/05/14');
-    this.endDay = new Date('2023/05/20');
-    this.days = academicDays;
-    this.periods = defaultPeriod;
-    const id = parseInt(this.route.snapshot.paramMap.get('id'));
-    if (id) {
-      this.studentid = id;
-      this.courses = courses.filter(
-        (course) => course.studentid == this.studentid
-      );
+  daysToMiliseconds(days: number): number{
+    return days * 1000 * 60 * 60 * 24;
+  }
+
+  setDaysList(day: Date): AcademicDay[]{
+    const daysToSunday = day.getDay();
+    let result = [];
+    for (let i = 0; i < this.dayCount; i++){
+      result.push({
+        date: new Date(day.getTime() + this.daysToMiliseconds(i - daysToSunday)),
+        period: defaultPeriod,
+      })
     }
+    this.startDay = result[0].date;
+    this.endDay = result[result.length - 1].date;
+
+    return result;
+  }
+
+  onPrevPeriod(){
+    let day = this.days[0];
+    this.days = this.setDaysList(new Date(day.date.getTime() - this.daysToMiliseconds(this.dayCount)))
+    this.dayList = of(this.days);
+    
+    this.loadCourses();
+  }
+
+  onNextPeriod(){
+    let day = this.days[0];
+    this.days = this.setDaysList(new Date(day.date.getTime() + this.daysToMiliseconds(this.dayCount)))
+    this.dayList = of(this.days);
+
+    this.loadCourses();
+  }
+
+  loadCourses(){
+    this.courseService.loadcourses(this.studentid.toString(), this.startDay);
+  }
+
+  ngOnInit() {
+    this.studentid = this.route.snapshot.params['id'];
+    this.students = students;
+    // this.days = academicDays;
+    this.days = this.setDaysList(new Date());
+    this.periods = defaultPeriod;
+    const id = this.route.snapshot.paramMap.get('id');
+
+    this.dayList = of(this.days);
 
     this.courseService.courseObservable.subscribe((courses) => {
       this.courses = courses;
-      console.log(courses);
+      this.courses.forEach((course, i) => {
+        console.log(`Course ${i}:${course}`)
+      })
     });
 
-    // this.newCourseModal.nativeElement.addEventListener(
-    //   'hidden.bs.modal',
-    //   (event) => {
-    //     this.selCourse = undefined;
-    //   }
-    // );
+    this.loadCourses();
 
     this.maxPos = this.periods.length * 50;
   }
@@ -110,13 +147,14 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
 
   onAddCourse() {
     this.selCourse = {
-      id: 0,
+      _id: "",
       studentid: this.studentid,
       name: '',
       day: new Date(),
       startTime: new Date(`1970-01-01 00:00`),
       endTime: new Date(`1970-01-01 00:00`),
     };
+
 
     setTimeout(() => {
       let modal = new bootstrap.Modal('#courseNew');
@@ -135,9 +173,6 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
   }
 
   calcTopPos(course: Course) {
-    if (course.id === 1){
-      console.log((course.startTime.getHours() + (course.startTime.getMinutes() / 60))  * 50);
-    }
     return (course.startTime.getHours() + (course.startTime.getMinutes() / 60))  * 50;
     // return 50;
   }
@@ -189,22 +224,23 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
   }
 
   onDragRelease(event, course: Course) {
-    // console.log(event.dropPoint.y - event.container.element.nativeElement.offsetTop);
+    let newcourse = course;
     let durationMin =
       (course.endTime.getTime() - course.startTime.getTime()) / 1000 / 60;
-    console.log(event);
     let posY: number =
       event.dropPoint.y - event.container.element.nativeElement.offsetTop + window.scrollY;
     posY = Math.min(Math.max(0, posY), this.maxPos);
-    console.log(`posY: ${posY}`);
     let startTime = ~~(posY / 50);
-    course.day = new Date(
+    newcourse.day = new Date(
       event.container.element.nativeElement.dataset['daydate']
     );
     // course.startTime = new Date(`1970-01-01 0:00`).setHours(9 + startTime);
-    course.startTime = new Date(1900, 0, 1, startTime);
-    course.endTime = new Date(1900, 0, 1, startTime + ~~(durationMin / 60));
-    console.log(`onDragRelease: ${course}`);
+    newcourse.startTime = new Date(1900, 0, 1, startTime);
+    newcourse.endTime = new Date(1900, 0, 1, startTime + ~~(durationMin / 60));
+    this.courseService.putCourse(newcourse).subscribe(
+      (course) => course = newcourse
+    );
+
     this.dragCourse = undefined;
   }
 

@@ -2,7 +2,7 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <h1>日報</h1>
+      <h1>Scheduler</h1>
     </div>
   </div>
   <div class="row">
@@ -36,11 +36,11 @@
     </div>
     <div class="col">
       <div class="input-group">
-        <button class="btn btn-outline-secondary" type="button">
+        <button class="btn btn-outline-secondary" type="button" (click)="onPrevPeriod()">
           <mat-icon>navigate_before</mat-icon>
         </button>
         <input type="text" class="form-control" disabled=true [value]="getDateRangeName()"> 
-        <button class="btn btn-outline-secondary" type="button">
+        <button class="btn btn-outline-secondary" type="button" (click)="onNextPeriod()">
           <mat-icon>navigate_next</mat-icon>
         </button>
       </div>
@@ -61,7 +61,7 @@
         </div>
         <div class="day-list">
           <div class="weekday-list" cdkDropListGroup >
-            <div *ngFor="let day of days" class="day" >
+            <div *ngFor="let day of dayList | async" class="day" >
               <div class="day">
                 <p>{{day.date | date:'ccc'}}</p>
                 <h3>{{ day.date | date:'dd' }}</h3>
@@ -70,7 +70,7 @@
                 <div *ngFor="let period of periods" class="period-inverse">
                 </div>
                 <div *ngFor="let course of courses">
-                  <div *ngIf="canShowCourse(course, day)">
+                  <div *ngIf="canShowCourse(course, day)" class="test">
                     <div class="course"
                       [style.top.px]="calcTopPos(course)"
                       [style.height.px]="divHeight(course)"

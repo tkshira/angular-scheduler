@@ -5,7 +5,7 @@ import {
   OnChanges,
   ViewChild,
   ElementRef,
-  Input,
+  Input
 } from '@angular/core';
 import { Course } from './../../interfaces/courses';
 import { CourseService } from './../../services/course.service';
@@ -32,7 +32,7 @@ export class CourseNewComponent implements OnChanges {
 
   onSave() {
     let course: Course = {
-      id: this.course.id,
+      _id: this.course._id,
       studentid: this.course.studentid,
       name: this.courseForm.value.name,
       day: new Date(this.courseForm.value.courseDate),
@@ -41,22 +41,24 @@ export class CourseNewComponent implements OnChanges {
     };
 
     let courseObs;
-    if (course.id) {
+    console.log(course);
+    if (course._id) {
       courseObs = this.courseService.putCourse(course);
     } else {
       courseObs = this.courseService.postCourse(course);
     }
     if (courseObs) {
       courseObs.subscribe({
-        next: () => this.modalCloseBtn.nativeElement.click(),
+        next: () => {
+          this.modalCloseBtn.nativeElement.click()
+        },
       });
     }
   }
 
   ngOnChanges() {
+    console.log(this.course)
     if (this.course) {
-      // console.log(formatDate(this.course.day, 'YYYY-mm-DD', undefined));
-      console.log(this.dp.transform(this.course.day, 'yyyy-MM-dd'));
       this.courseForm.setValue({
         name: this.course.name,
         courseDate: this.dp.transform(this.course.day, 'yyyy-MM-dd'),

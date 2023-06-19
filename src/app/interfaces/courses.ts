@@ -1,7 +1,7 @@
 import { Time, WeekDay } from '@angular/common';
 
 export interface Course {
-  id: number;
+  _id: string;
   studentid: number;
   day: Date;
   name: string;
@@ -11,7 +11,7 @@ export interface Course {
 
 export const courses: Course[] = [
   {
-    id: 1,
+    _id: "1",
     studentid: 1,
     name: 'Math',
     day: new Date(2023, 4, 15),
@@ -19,7 +19,7 @@ export const courses: Course[] = [
     endTime: new Date(0, 1, 1, 10, 0),
   },
   {
-    id: 2,
+    _id: "2",
     studentid: 1,
     name: 'Sciences',
     day: new Date(2023, 4, 15),
@@ -27,7 +27,7 @@ export const courses: Course[] = [
     endTime: new Date(0, 1, 1, 11, 0),
   },
   {
-    id: 3,
+    _id: "3",
     studentid: 1,
     name: 'Math',
     day: new Date(2023, 4, 16),
@@ -35,7 +35,7 @@ export const courses: Course[] = [
     endTime: new Date(0, 1, 1, 12, 0),
   },
   {
-    id: 4,
+    _id: "4",
     studentid: 1,
     name: 'Sciences',
     day: new Date(2023, 4, 16),
@@ -43,7 +43,7 @@ export const courses: Course[] = [
     endTime: new Date(0, 1, 1, 13, 0),
   },
   {
-    id: 5,
+    _id: "5",
     studentid: 1,
     name: 'Geography',
     day: new Date(2023, 4, 16),
