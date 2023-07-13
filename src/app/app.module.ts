@@ -17,6 +17,7 @@ import { CourseNewComponent } from './course-timeline/course-new/course-new.comp
 import { CourseService } from './services/course.service';
 
 import localeJp from '@angular/common/locales/ja';
+import { LoginComponent } from './login/login.component';
 registerLocaleData(localeJp);
 
 @NgModule({
@@ -25,7 +26,8 @@ registerLocaleData(localeJp);
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
-      { path: '', component: StudentListComponent },
+      { path: '', component: LoginComponent },
+      { path: 'student', component: StudentListComponent },
       { path: 'student/:id', component: StudentComponent },
       { path: 'courses/:id', component: CourseTimelineComponent },
     ]),
@@ -41,6 +43,7 @@ registerLocaleData(localeJp);
     StudentComponent,
     CourseTimelineComponent,
     CourseNewComponent,
+    LoginComponent,
   ],
   bootstrap: [AppComponent],
   providers: [

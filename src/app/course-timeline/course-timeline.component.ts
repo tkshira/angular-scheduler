@@ -3,8 +3,7 @@ import {
   ElementRef,
   OnInit,
   ViewChild,
-  AfterViewInit,
-  Input
+  AfterViewInit
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AcademicDay, academicDays } from '../interfaces/academic-day';
@@ -12,7 +11,7 @@ import { Course, courses } from '../interfaces/courses';
 import { defaultPeriod, Period } from '../interfaces/period';
 import { Student, students } from '../interfaces/student';
 import { CourseService } from '../services/course.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Observable, of } from 'rxjs';
 
 declare var bootstrap: any;
@@ -43,6 +42,7 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
   @ViewChild('newCourseModal') newCourseModal: ElementRef;
   constructor(
     private route: ActivatedRoute,
+    private location: Location,
     private courseService: CourseService,
     private datePipe: DatePipe
   ) {}
@@ -83,6 +83,7 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
   }
 
   loadCourses(){
+    this.location.go(`/courses/${this.studentid}/?date=${this.startDay.toISOString()}`)
     this.courseService.loadcourses(this.studentid.toString(), this.startDay);
   }
 
@@ -98,6 +99,7 @@ export class CourseTimelineComponent implements OnInit, AfterViewInit {
 
     this.courseService.courseObservable.subscribe((courses) => {
       this.courses = courses;
+      console.log(this.courses)
       this.courses.forEach((course, i) => {
         console.log(`Course ${i}:${course}`)
       })
